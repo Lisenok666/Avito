@@ -1,5 +1,4 @@
-
-class git ():
+class   CountVectorizer ():
     def __init__(self, lowercase=True):
         self.lowercase = lowercase
         self.corpus = []
