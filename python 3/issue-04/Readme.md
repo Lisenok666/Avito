@@ -1,0 +1,1 @@
+python -m pytest -v .\pytest_fit_transform.py
