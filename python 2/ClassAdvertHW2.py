@@ -2,8 +2,7 @@ import json
 import keyword
 
 
-class json2py():
-
+class JsonToPy():
 
     def __init__(self):
         self.mass = list()
@@ -14,7 +13,6 @@ class json2py():
                 self.mass.append([pred_str + str(key), dct[key]])
             else:
                 self.mass.append([pred_str + str(key), dct[key]])
-                # self.keys(dct[key], pred_str= pred_str + str(key)+'.')
         return self.mass
 
 
@@ -33,45 +31,40 @@ def object_correct(cls):
 
 
 class ColorizeMixin:
-    repr_color_code = 33
+    def __init__(self):
+        self.repr_color_code = 33
 
-    def __repr__(self):
-        title = super().__getattribute__('title')
-        price = super().__getattribute__('price')
-        temp = f'\033[1;{ColorizeMixin.repr_color_code};01m' + f'{title} | {price} ₽' + '\033[0;38;01m'
-        return temp
 
 
 @object_correct
 class Advert(ColorizeMixin):
+    repr_color_code = 38
+
     def __init__(self, lesson: dict):
-        mass_attr = json2py().keys(lesson)
+        super().__init__()
+        mass_attr = JsonToPy().keys(lesson)
+        self.price = 0
         for pred_attr in mass_attr:
             name_attr = pred_attr[0]
             if keyword.iskeyword(name_attr):
                 name_attr = name_attr + '_'
             setattr(self, name_attr, pred_attr[1])
 
-    # def setter(self, name_attr, val):
-    #     object.__setattr__(self, name_attr.split('.')[-1], val)
-
     def __getattribute__(self, attr):
         t = super().__getattribute__(attr)
-        if type(t) is not dict:
-            print(t)
+        if not isinstance(t, dict):
+            return t
         else:
             return Advert(t, check_value=False)
 
-    # def __repr__(self):
-    #     title = super().__getattribute__('title')
-    #     price = super().__getattribute__('price')
-    #     return f'{title} | {price} ₽'
+    def __repr__(self):
+        return f'\033[1;{self.repr_color_code};01m' + f'{self.title} | {self.price} ₽' + '\033[0;38;01m'
 
 
 if __name__ == '__main__':
     lesson_str = """{
     "title": "Вельш-корги",
-    "price": 1000,
+    "price": 100,
     "class": "dogs",
     "location": {
         "address": "сельское поселение Ельдигинское, поселок санатория Тишково, 25"
@@ -79,11 +72,10 @@ if __name__ == '__main__':
     }"""
     lesson = json.loads(lesson_str)
     lesson_ad = Advert(lesson)
-    # lesson_ad.price
-    lesson_ad.title
-    lesson_ad.location.address
+    lesson_ad.price
+    print(lesson_ad.title)
+    print(lesson_ad.location.address)
     print(lesson_ad)
     lesson_ad.title
-    print('100')
-    lesson_ad.class_
-    # lesson_ad.class_
+    print(lesson_ad.price)
+    print(lesson_ad.class_)
