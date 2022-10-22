@@ -26,8 +26,8 @@ def object_correct(cls):
         if check_value and lesson['price'] < 0:
             raise ValueError('must be >= 0')
         return cls.__call__(lesson)
-
     return wrapper
+    #return wrapper
 
 
 class ColorizeMixin:
