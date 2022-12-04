@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5fd6b277-7816-4275-881b-43486cba43c7" name="Changes" comment="Without tets">
       <change beforePath="$PROJECT_DIR$/../python 2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../python 2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cli.py" beforeDir="false" afterPath="$PROJECT_DIR$/cli.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

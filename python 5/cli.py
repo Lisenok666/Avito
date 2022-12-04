@@ -80,7 +80,7 @@ def menu(ctx):
         click.echo(pizza.dict())
 
 
-class pizza_recipe():
+class PizzaRecipe():
     picture = ' 😉: '
 
     def __init__(self, name, size, recipe, cook_time=1):
