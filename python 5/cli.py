@@ -80,7 +80,7 @@ def menu(ctx):
         click.echo(pizza.dict())
 
 
-class PizzaRecipe():
+class PizzaRecipe:
     picture = ' 😉: '
 
     def __init__(self, name, size, recipe, cook_time=1):
@@ -100,7 +100,7 @@ class PizzaRecipe():
         return ret
 
 
-class Margherita(pizza_recipe):
+class Margherita(PizzaRecipe):
     picture = ' 🧀: '
 
 
@@ -110,7 +110,7 @@ class Margherita(pizza_recipe):
         super(Margherita, self).__init__('Margherita', size, recipe, cook_time)
 
 
-class Pepperoni(pizza_recipe):
+class Pepperoni(PizzaRecipe):
     picture = ' 🍕: '
 
 
@@ -120,7 +120,7 @@ class Pepperoni(pizza_recipe):
         super(Pepperoni, self).__init__('Pepperoni', size, recipe, cook_time)
 
 
-class Hawaiian(pizza_recipe):
+class Hawaiian(PizzaRecipe):
     picture = ' 🍍: '
 
 
