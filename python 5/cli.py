@@ -1,20 +1,15 @@
 import click
+
 from random import randint
 
 
-def correct_init(init):
-    def wrapper(self, name, size, recipe):
-        if size not in ['L', 'XL']:
-            raise ValueError('Size must be L or XL')
-        return init(self, name, size, recipe)
-
-    return wrapper
-
-
 def log(mask):
+
     def decorator(func):
+
         def wrapper(pizza):
-            print(mask.format(randint(1, 10)))
+
+            print(mask.format(func(pizza)))
             return func
 
         return wrapper
@@ -25,13 +20,20 @@ def log(mask):
 @log('🍳‍ Приготовили за {}с!')
 def bake(pizza):
     """Готовит пиццу"""
-    pass
+    cook_time = pizza.cook_time + randint(1, 5)
+    if pizza.size == 'XL':
+        cook_time *= 2
+    return cook_time
 
 
 @log('🏍 Доставили за {}с!')
 def delivery(pizza):
     """Доставляет пиццу"""
-    pass
+    is_big = 0
+    if pizza.size == 'XL':
+        is_big = 1
+    sndart_time = randint(1, 10) + is_big * randint(1, 5)
+    return sndart_time
 
 
 # переобозначим функцию т.к. у нас есть option delivery
@@ -48,17 +50,21 @@ def pickup(pizza):
 @click.pass_context
 def cli(ctx):
     ctx.ensure_object(dict)
-    MENU_PIZZA = {'pepperoni': Pepperoni(), 'margherita': Margherita(), 'hawaiian': Hawaiian()}
+    # MENU_PIZZA = {'pepperoni': Pepperoni(), 'margherita': Margherita(), 'hawaiian': Hawaiian()}
     ctx.obj['MENU_PIZZA'] = {'pepperoni': Pepperoni(), 'margherita': Margherita(), 'hawaiian': Hawaiian()}
 
 
 @cli.command()
 @click.option('--delivery', default=False, is_flag=True)
+@click.option('--big_size', default=False, is_flag=True)
 @click.argument('pizza', nargs=1)
 @click.pass_context
-def order(ctx, pizza: str, delivery: bool):
+def order(ctx, pizza: str, big_size: bool, delivery: bool):
     """Готовит и доставляет пиццу"""
     pizza = ctx.obj['MENU_PIZZA'][pizza]
+    if big_size:
+        pizza.make_big()
+
     if delivery:
         delivery_alt(pizza)
     else:
@@ -70,19 +76,23 @@ def order(ctx, pizza: str, delivery: bool):
 @click.pass_context
 def menu(ctx):
     """Выводит меню"""
-    click.echo(Margherita().dict)
-    click.echo(Pepperoni().dict)
-    click.echo(Hawaiian().dict)
+    for pizza in ctx.obj['MENU_PIZZA'].values():
+        click.echo(pizza.dict())
 
 
 class pizza_recipe():
-    picture = ' \N{winking face}: '
+    picture = ' 😉: '
 
-    @correct_init
-    def __init__(self, name, size, recipe):
+    def __init__(self, name, size, recipe, cook_time=1):
+        if size not in ['L', 'XL']:
+            raise ValueError('Size must be L or XL')
         self.name = name
         self.size = size
+        self.cook_time = cook_time
         self.recipe = recipe
+
+    def make_big(self):
+        self.size = 'XL'
 
     def dict(self):
         ret = ' - ' + str(self.name) + self.picture
@@ -93,25 +103,31 @@ class pizza_recipe():
 class Margherita(pizza_recipe):
     picture = ' 🧀: '
 
+
     def __init__(self, size='L'):
         recipe = ['tomato sauce', 'mozzarella', 'tomatoes']
-        super(Margherita, self).__init__('Margherita', size, recipe)
+        cook_time = 3
+        super(Margherita, self).__init__('Margherita', size, recipe, cook_time)
 
 
 class Pepperoni(pizza_recipe):
     picture = ' 🍕: '
 
+
     def __init__(self, size='L'):
         recipe = ['tomato sauce', 'mozzarella', 'pepperoni']
-        super(Pepperoni, self).__init__('Pepperoni', size, recipe)
+        cook_time = 5
+        super(Pepperoni, self).__init__('Pepperoni', size, recipe, cook_time)
 
 
 class Hawaiian(pizza_recipe):
     picture = ' 🍍: '
 
+
     def __init__(self, size='L'):
         recipe = ['tomato sauce', 'mozzarella', 'chicken', 'pineapples']
-        super(Hawaiian, self).__init__('Hawaiian', size, recipe)
+        cook_time = 7
+        super(Hawaiian, self).__init__('Hawaiian', size, recipe, cook_time)
 
 
 if __name__ == '__main__':
