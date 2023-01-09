@@ -1,6 +1,5 @@
 import click
-
-from random import randint
+import random
 
 
 def log(mask):
@@ -18,7 +17,7 @@ def log(mask):
 @log("🍳‍ Приготовили за {}с!")
 def bake(pizza):
     """Готовит пиццу"""
-    cook_time = pizza.cook_time + randint(1, 5)
+    cook_time = pizza.cook_time + random.randint(1, 5)
     if pizza.size == "XL":
         cook_time *= 2
     return cook_time
@@ -30,7 +29,7 @@ def delivery(pizza):
     is_big = 0
     if pizza.size == "XL":
         is_big = 1
-    sndart_time = randint(1, 10) + is_big * randint(1, 5)
+    sndart_time = random.randint(1, 10) + is_big * random.randint(1, 5)
     return sndart_time
 
 
@@ -41,7 +40,11 @@ delivery_alt = delivery
 @log("🏡 Забрали за {}с!")
 def pickup(pizza):
     """Самовывоз"""
-    pass
+    is_big = 0
+    if pizza.size == "XL":
+        is_big = 1
+    sndart_time = random.randint(1, 2) + is_big * random.randint(1, 3)
+    return sndart_time
 
 
 @click.group()
