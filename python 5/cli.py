@@ -6,8 +6,9 @@ def log(mask):
     def decorator(func):
         def wrapper(pizza):
 
-            print(mask.format(func(pizza)))
-            return func
+            ret = func(pizza)
+            print(mask.format(ret))
+            return ret
 
         return wrapper
 
